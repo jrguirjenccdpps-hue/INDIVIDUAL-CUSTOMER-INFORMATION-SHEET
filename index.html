@@ -66,6 +66,27 @@ canvas { width:100%; max-width:500px; height:200px; border-radius:5px; border:1p
 .sources-grid label { display:inline-block; background:#f4f7f6; border:1px solid #c8e6c9; border-radius:20px; padding:6px 12px; cursor:pointer; font-size:13px; transition:all 0.3s; }
 .sources-grid input[type="checkbox"]:checked + label { background:var(--secondary); color:white; border-color:var(--secondary);}
 @media(max-width:600px){.row{flex-direction:column;} canvas{height:150px;}}
+
+/* Spinner CSS */
+.spinner {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #2e7d32; /* theme green */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Error highlight for missing fields */
+.input-error {
+  border-color: red !important;
+  background-color: #ffe6e6 !important;
+}
 </style>
 </head>
 <body>
@@ -87,20 +108,20 @@ canvas { width:100%; max-width:500px; height:200px; border-radius:5px; border:1p
 <div class="section">
 <h3>Personal Information</h3>
 <div class="row">
-<div class="col"><label>Last Name*</label><input type="text" id="lastName" required></div>
-<div class="col"><label>First Name*</label><input type="text" id="firstName" required></div>
+<div class="col"><label>Last Name*</label><input type="text" id="lastName"></div>
+<div class="col"><label>First Name*</label><input type="text" id="firstName"></div>
 <div class="col"><label>Middle Name</label><input type="text" id="middleName"></div>
 <div class="col"><label>Suffix</label><input type="text" id="suffix"></div>
 </div>
 <div class="row">
 <div class="col"><label>Alias</label><input type="text" id="alias"></div>
-<div class="col"><label>Birthdate*</label><input type="date" id="birthdate" required></div>
+<div class="col"><label>Birthdate*</label><input type="date" id="birthdate"></div>
 <div class="col"><label>Birthplace*</label><input type="text" id="birthplace"></div>
 <div class="col"><label>Mother's Maiden Name</label><input type="text" id="motherMaiden"></div>
 </div>
 <div class="row">
-<div class="col"><label>Sex</label><select id="sex"><option>Male</option><option>Female</option></select></div>
-<div class="col"><label>Marital Status</label><select id="maritalStatus"><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></div>
+<div class="col"><label>Sex</label><select id="sex"><option value="">Select</option><option>Male</option><option>Female</option></select></div>
+<div class="col"><label>Marital Status</label><select id="maritalStatus"><option value="">Select</option><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></div>
 <div class="col"><label>Nationality*</label><input type="text" id="nationality" value="Filipino"></div>
 </div>
 </div>
@@ -113,18 +134,14 @@ canvas { width:100%; max-width:500px; height:200px; border-radius:5px; border:1p
 <div class="col"><label>Permanent Address</label><textarea id="permAddress"></textarea></div>
 </div>
 <div class="row">
-<div class="col"><label>Mobile*</label><input type="text" id="mobile" required></div>
+<div class="col"><label>Mobile*</label><input type="text" id="mobile"></div>
 <div class="col"><label>Landline</label><input type="text" id="landline"></div>
 <div class="col"><label>Email</label><input type="email" id="email"></div>
 </div>
 <div class="row">
 <div class="col">
 <label>Receive Notifications?</label>
-<select id="notifications">
-<option>Yes - Email</option>
-<option>Yes - SMS</option>
-<option>No</option>
-</select>
+<select id="notifications"><option value="">Select</option><option>Yes - Email</option><option>Yes - SMS</option><option>No</option></select>
 </div>
 </div>
 </div>
@@ -156,7 +173,7 @@ canvas { width:100%; max-width:500px; height:200px; border-radius:5px; border:1p
 <!-- NATURE OF WORK -->
 <div class="section">
 <h3>Nature of Work</h3>
-<select id="natureOfWorkSelect" onchange="toggleWorkFields()" required>
+<select id="natureOfWorkSelect" onchange="toggleWorkFields()">
 <option value="">Select Work Type</option>
 <option value="Employed">Employed (Private)</option>
 <option value="SelfEmployed">Self Employed</option>
@@ -191,6 +208,25 @@ canvas { width:100%; max-width:500px; height:200px; border-radius:5px; border:1p
 <button class="btn-primary" onclick="submitForm()">Submit Form</button>
 </div>
 
+<!-- Loading Overlay -->
+<div id="loadingOverlay" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.4);
+  z-index:9999;
+  text-align:center;
+  color:white;
+  font-size:20px;
+  font-weight:600;
+">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%);">
+    <div class="spinner"></div>
+    <div style="margin-top:12px;">Submitting, please wait...</div>
+  </div>
+</div>
+
 <script>
 // SignaturePad with green theme
 const canvas = document.getElementById('signature-pad');
@@ -200,7 +236,6 @@ const signaturePad = new SignaturePad(canvas, {
   minWidth: 1,
   maxWidth: 2.5
 });
-
 function resizeCanvas(){
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
   canvas.width = canvas.offsetWidth * ratio;
@@ -235,13 +270,78 @@ function toggleWorkFields(){
   container.innerHTML = html;
 }
 
-function submitForm(){
+// Validation with red highlight
+function validateForm(){
+  let valid = true;
+
+  // Remove previous error highlights
+  document.querySelectorAll('.input-error').forEach(el=>el.classList.remove('input-error'));
+
+  const inputs = document.querySelectorAll('.container input, .container select, .container textarea');
+  for(const input of inputs){
+    if(input.type !== 'checkbox' && input.type !== 'button'){
+      if(input.value.trim() === ''){
+        input.classList.add('input-error');
+        if(valid) input.focus();
+        valid = false;
+      }
+    }
+  }
+
+  const fundsChecked = document.querySelectorAll('input[name="sourcesOfFunds"]:checked');
+  if(fundsChecked.length === 0){
+    alert("Please select at least one source of funds.");
+    valid = false;
+  }
+
+  const workType = document.getElementById('natureOfWorkSelect').value;
+  if(!workType){
+    document.getElementById('natureOfWorkSelect').classList.add('input-error');
+    if(valid) document.getElementById('natureOfWorkSelect').focus();
+    valid = false;
+  }
+
+  const workFieldsMap = {
+    "Employed": ['employerName','natureWork','officeAddress'],
+    "SelfEmployed": ['businessName','businessAddress'],
+    "GovernmentEmployee": ['govPosition','govAgency','govAddress'],
+    "Student": ['schoolName','schoolAddress'],
+    "Others": ['otherWork']
+  };
+  const fieldsToCheck = workFieldsMap[workType] || [];
+  for(const id of fieldsToCheck){
+    const field = document.getElementById(id);
+    if(field && field.value.trim() === ''){
+      field.classList.add('input-error');
+      if(valid) field.focus();
+      valid = false;
+    }
+  }
+
   if(!document.getElementById("agreePrivacy").checked){
-    alert("You must agree to the Privacy Notice before submitting."); return;
+    alert("You must agree to the Privacy Notice before submitting.");
+    valid = false;
   }
+
   if(signaturePad.isEmpty()){
-    alert("Please provide signature."); return;
+    alert("Please provide signature.");
+    valid = false;
   }
+
+  return valid;
+}
+
+// Remove error highlight on input
+document.querySelectorAll('.container input, .container select, .container textarea').forEach(el=>{
+  el.addEventListener('input', ()=>el.classList.remove('input-error'));
+});
+
+function submitForm(){
+  if(!validateForm()) return;
+
+  const submitBtn = document.querySelector('button.btn-primary');
+  document.getElementById('loadingOverlay').style.display = 'block';
+  submitBtn.disabled = true;
 
   const funds = Array.from(document.querySelectorAll('input[name="sourcesOfFunds"]:checked')).map(f=>f.value);
 
@@ -286,7 +386,7 @@ function submitForm(){
     signature: signaturePad.toDataURL("image/jpeg")
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbwR47e2VTnTtY--r6g7cpiPYAmIyUn20s3ZiCp8RzG4mvOiE8D37vLsRu8IJ34VBM2W/exec", { // Replace with your Apps Script Web App URL
+  fetch("https://script.google.com/macros/s/AKfycbwR47e2VTnTtY--r6g7cpiPYAmIyUn20s3ZiCp8RzG4mvOiE8D37vLsRu8IJ34VBM2W/exec", {
     method:"POST",
     body:JSON.stringify(formData)
   }).then(res=>res.json())
@@ -294,7 +394,11 @@ function submitForm(){
       alert("Submitted Successfully!\nCustomer ID: "+(data.customerID||'N/A'));
       location.reload();
     })
-    .catch(err=>alert("Error submitting form: "+err));
+    .catch(err=>alert("Error submitting form: "+err))
+    .finally(()=>{
+      document.getElementById('loadingOverlay').style.display = 'none';
+      submitBtn.disabled = false;
+    });
 }
 </script>
 </body>
