@@ -8,269 +8,148 @@
 :root {
   --primary: #1b5e20;
   --secondary: #2e7d32;
-  --light: #f4f7f6;
-  --accent: #a5d6a7;
-  --border: #c8e6c9;
   --highlight: #e8f5e9;
+  --border: #c8e6c9;
+  --accent: #a5d6a7;
 }
-
 body {
   font-family: 'Segoe UI', Arial, sans-serif;
-  background: var(--light);
-  margin: 0;
-  padding: 0;
+  margin: 0; background: #f4f7f6;
 }
-
 .header {
   background: var(--primary);
   color: white;
-  padding: 20px 30px;
+  padding: 20px 10px;
+  text-align: center;
   font-size: 22px;
   font-weight: 700;
   letter-spacing: 0.5px;
-  text-align: center;
 }
-
 .container {
-  max-width: 1000px;
-  margin: 20px auto;
-  background: white;
-  padding: 25px;
+  max-width: 1000px; margin: 20px auto;
+  background: white; padding: 25px;
   border-radius: 10px;
 }
-
 .section {
-  margin-top: 30px;
-  padding: 20px;
+  margin-top: 25px;
+  padding: 15px;
   background: var(--highlight);
   border-left: 5px solid var(--secondary);
   border-radius: 8px;
 }
-
 .section h3 {
   margin-top: 0;
   color: var(--primary);
-  font-weight: 600;
-  border-bottom: 1px solid var(--accent);
-  padding-bottom: 6px;
+  border-bottom:1px solid var(--accent);
+  padding-bottom:5px;
 }
-
 .row {
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 12px;
 }
-
-.col {
-  flex: 1;
-  min-width: 200px;
-}
-
-label {
-  font-size: 13px;
-  font-weight: 500;
-}
-
-input, select, textarea {
-  width: 100%;
-  padding: 8px;
-  margin-top: 4px;
-  margin-bottom: 12px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-}
-
-input:focus, select:focus, textarea:focus {
-  border-color: var(--secondary);
-  box-shadow: 0 0 4px rgba(46,125,50,0.2);
-  outline: none;
-}
-
-button {
-  padding: 10px 20px;
-  border-radius: 6px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.btn-primary {
-  background: var(--secondary);
-  color: white;
-}
-
-.btn-primary:hover {
-  background: var(--primary);
-}
-
-.btn-secondary {
-  background: #777;
-  color: white;
-}
-
-.signature-box {
-  border: 1px dashed var(--secondary);
-  border-radius: 6px;
-  text-align: center;
-  background: white;
-  padding: 15px;
-}
-
-canvas {
-  width: 100%;
-  max-width: 500px;
-  height: 200px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.footer-note {
-  font-size: 12px;
-  color: #444;
-  margin-top: 8px;
-}
-
-.privacy-box {
-  background: white;
-  border:1px solid var(--border);
-  padding:15px;
-  height:200px;
-  overflow-y:auto;
-  font-size:13px;
-  line-height:1.5;
-  border-radius:6px;
-}
-
-.consent-box {
-  margin-top:10px;
-  font-size:14px;
-}
-
-/* Sources of Funds - professional toggle buttons */
-.sources-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.sources-grid input[type="checkbox"] {
-  display: none;
-}
-
-.sources-grid label {
-  display: inline-block;
-  background: #f4f7f6;
-  border: 1px solid #c8e6c9;
-  border-radius: 20px;
-  padding: 8px 12px;
-  cursor: pointer;
-  font-size: 13px;
-  transition: all 0.3s;
-}
-
-.sources-grid input[type="checkbox"]:checked + label {
-  background: var(--secondary);
-  color: white;
-  border-color: var(--secondary);
-}
-
-/* Responsive adjustments */
-@media (max-width: 600px) {
-  .row {
-    flex-direction: column;
-  }
-  canvas {
-    height: 150px;
-  }
-}
+.col { flex:1; min-width:200px; }
+label { font-size:13px; font-weight:500; }
+input, select, textarea { width:100%; padding:8px; margin-top:4px; margin-bottom:10px; border-radius:5px; border:1px solid #ccc; font-size:14px; }
+input:focus, select:focus, textarea:focus { outline:none; border-color: var(--secondary); box-shadow:0 0 4px rgba(46,125,50,0.2);}
+button { padding:10px 20px; border-radius:6px; border:none; font-weight:600; cursor:pointer; transition:all 0.3s;}
+.btn-primary { background: var(--secondary); color:white; }
+.btn-primary:hover { background: var(--primary);}
+.btn-secondary { background:#777; color:white;}
+.signature-box { border:1px dashed var(--secondary); border-radius:6px; text-align:center; background:white; padding:10px; }
+canvas { width:100%; max-width:500px; height:200px; border-radius:5px; border:1px solid #ccc;}
+.footer-note { font-size:12px; color:#444; margin-top:8px; }
+.privacy-box { background:white; border:1px solid var(--border); padding:12px; height:200px; overflow-y:auto; font-size:13px; line-height:1.5; border-radius:6px;}
+.consent-box { margin-top:10px; font-size:14px; }
+.sources-grid { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.sources-grid input[type="checkbox"] { display:none; }
+.sources-grid label { display:inline-block; background:#f4f7f6; border:1px solid #c8e6c9; border-radius:20px; padding:6px 12px; cursor:pointer; font-size:13px; transition:all 0.3s; }
+.sources-grid input[type="checkbox"]:checked + label { background:var(--secondary); color:white; border-color:var(--secondary);}
+@media(max-width:600px){.row{flex-direction:column;} canvas{height:150px;}}
 </style>
 </head>
 <body>
 
 <div class="header">INDIVIDUAL CUSTOMER INFORMATION SHEET</div>
-
 <div class="container">
 
-<!-- GENERAL INFO -->
+<!-- GENERAL -->
 <div class="section">
 <h3>General Information</h3>
 <div class="row">
-  <div class="col"><label>Date Filed</label><input type="date" id="dateFiled"></div>
-  <div class="col"><label>Suki Card No.</label><input type="text" id="sukiCard"></div>
-  <div class="col"><label>Philsys ID No.</label><input type="text" id="philsysID"></div>
+<div class="col"><label>Date Filed</label><input type="date" id="dateFiled"></div>
+<div class="col"><label>Suki Card No.</label><input type="text" id="sukiCard"></div>
+<div class="col"><label>Philsys ID No.</label><input type="text" id="philsysID"></div>
 </div>
 </div>
 
-<!-- PERSONAL INFO -->
+<!-- PERSONAL -->
 <div class="section">
 <h3>Personal Information</h3>
 <div class="row">
-  <div class="col"><label>Last Name*</label><input type="text" id="lastName" required></div>
-  <div class="col"><label>First Name*</label><input type="text" id="firstName" required></div>
-  <div class="col"><label>Middle Name</label><input type="text" id="middleName"></div>
-  <div class="col"><label>Suffix</label><input type="text" id="suffix"></div>
+<div class="col"><label>Last Name*</label><input type="text" id="lastName" required></div>
+<div class="col"><label>First Name*</label><input type="text" id="firstName" required></div>
+<div class="col"><label>Middle Name</label><input type="text" id="middleName"></div>
+<div class="col"><label>Suffix</label><input type="text" id="suffix"></div>
 </div>
 <div class="row">
-  <div class="col"><label>Alias</label><input type="text" id="alias"></div>
-  <div class="col"><label>Birthdate*</label><input type="date" id="birthdate" required></div>
-  <div class="col"><label>Birthplace*</label><input type="text" id="birthplace"></div>
-  <div class="col"><label>Mother's Maiden Name</label><input type="text" id="motherMaiden"></div>
+<div class="col"><label>Alias</label><input type="text" id="alias"></div>
+<div class="col"><label>Birthdate*</label><input type="date" id="birthdate" required></div>
+<div class="col"><label>Birthplace*</label><input type="text" id="birthplace"></div>
+<div class="col"><label>Mother's Maiden Name</label><input type="text" id="motherMaiden"></div>
 </div>
 <div class="row">
-  <div class="col"><label>Sex</label><select id="sex"><option>Male</option><option>Female</option></select></div>
-  <div class="col"><label>Marital Status</label><select id="maritalStatus"><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></div>
-  <div class="col"><label>Nationality*</label><input type="text" id="nationality" value="Filipino"></div>
+<div class="col"><label>Sex</label><select id="sex"><option>Male</option><option>Female</option></select></div>
+<div class="col"><label>Marital Status</label><select id="maritalStatus"><option>Single</option><option>Married</option><option>Widowed</option><option>Separated</option></select></div>
+<div class="col"><label>Nationality*</label><input type="text" id="nationality" value="Filipino"></div>
 </div>
 </div>
 
-<!-- CONTACT INFO -->
+<!-- CONTACT -->
 <div class="section">
 <h3>Contact Information</h3>
 <div class="row">
-  <div class="col"><label>Present Address</label><textarea id="presentAddress"></textarea></div>
-  <div class="col"><label>Permanent Address</label><textarea id="permAddress"></textarea></div>
+<div class="col"><label>Present Address</label><textarea id="presentAddress"></textarea></div>
+<div class="col"><label>Permanent Address</label><textarea id="permAddress"></textarea></div>
 </div>
 <div class="row">
-  <div class="col"><label>Mobile*</label><input type="text" id="mobile" required></div>
-  <div class="col"><label>Landline</label><input type="text" id="landline"></div>
-  <div class="col"><label>Email</label><input type="email" id="email"></div>
+<div class="col"><label>Mobile*</label><input type="text" id="mobile" required></div>
+<div class="col"><label>Landline</label><input type="text" id="landline"></div>
+<div class="col"><label>Email</label><input type="email" id="email"></div>
 </div>
 <div class="row">
-  <div class="col">
-    <label>Receive Notifications?</label>
-    <select id="notifications">
-      <option>Yes - Email</option>
-      <option>Yes - SMS</option>
-      <option>No</option>
-    </select>
-  </div>
+<div class="col">
+<label>Receive Notifications?</label>
+<select id="notifications">
+<option>Yes - Email</option>
+<option>Yes - SMS</option>
+<option>No</option>
+</select>
+</div>
 </div>
 </div>
 
-<!-- FINANCIAL INFO -->
+<!-- FINANCIAL -->
 <div class="section">
 <h3>Financial Information</h3>
 <div class="row">
-  <div class="col"><label>Monthly Gross Income (₱)</label><input type="number" id="monthlyIncome"></div>
-  <div class="col"><label>Annual Gross Income (₱)</label><input type="number" id="annualIncome"></div>
+<div class="col"><label>Monthly Gross Income (₱)</label><input type="number" id="monthlyIncome"></div>
+<div class="col"><label>Annual Gross Income (₱)</label><input type="number" id="annualIncome"></div>
 </div>
 
 <label>Sources of Funds*</label>
 <div class="sources-grid">
-  <input type="checkbox" id="fundSalary" name="sourcesOfFunds" value="Salary"><label for="fundSalary">Salary</label>
-  <input type="checkbox" id="fundBusiness" name="sourcesOfFunds" value="Business"><label for="fundBusiness">Business</label>
-  <input type="checkbox" id="fundRemittance" name="sourcesOfFunds" value="Remittances"><label for="fundRemittance">Remittances</label>
-  <input type="checkbox" id="fundPension" name="sourcesOfFunds" value="Pension"><label for="fundPension">Pension</label>
-  <input type="checkbox" id="fundSavings" name="sourcesOfFunds" value="Personal Savings"><label for="fundSavings">Personal Savings</label>
-  <input type="checkbox" id="fundInheritance" name="sourcesOfFunds" value="Inheritance"><label for="fundInheritance">Inheritance</label>
-  <input type="checkbox" id="fundWinnings" name="sourcesOfFunds" value="Winnings"><label for="fundWinnings">Winnings</label>
-  <input type="checkbox" id="fundRental" name="sourcesOfFunds" value="Rental Income"><label for="fundRental">Rental Income</label>
-  <input type="checkbox" id="fundInvestment" name="sourcesOfFunds" value="Investment/Dividends"><label for="fundInvestment">Investment/Dividends</label>
-  <input type="checkbox" id="fundProfession" name="sourcesOfFunds" value="Practice of Profession"><label for="fundProfession">Practice of Profession</label>
-  <input type="checkbox" id="fundOthers" name="sourcesOfFunds" value="Others"><label for="fundOthers">Others</label>
+<input type="checkbox" id="fundSalary" name="sourcesOfFunds" value="Salary"><label for="fundSalary">Salary</label>
+<input type="checkbox" id="fundBusiness" name="sourcesOfFunds" value="Business"><label for="fundBusiness">Business</label>
+<input type="checkbox" id="fundRemittance" name="sourcesOfFunds" value="Remittances"><label for="fundRemittance">Remittances</label>
+<input type="checkbox" id="fundPension" name="sourcesOfFunds" value="Pension"><label for="fundPension">Pension</label>
+<input type="checkbox" id="fundSavings" name="sourcesOfFunds" value="Personal Savings"><label for="fundSavings">Personal Savings</label>
+<input type="checkbox" id="fundInheritance" name="sourcesOfFunds" value="Inheritance"><label for="fundInheritance">Inheritance</label>
+<input type="checkbox" id="fundWinnings" name="sourcesOfFunds" value="Winnings"><label for="fundWinnings">Winnings</label>
+<input type="checkbox" id="fundRental" name="sourcesOfFunds" value="Rental Income"><label for="fundRental">Rental Income</label>
+<input type="checkbox" id="fundInvestment" name="sourcesOfFunds" value="Investment/Dividends"><label for="fundInvestment">Investment/Dividends</label>
+<input type="checkbox" id="fundProfession" name="sourcesOfFunds" value="Practice of Profession"><label for="fundProfession">Practice of Profession</label>
+<input type="checkbox" id="fundOthers" name="sourcesOfFunds" value="Others"><label for="fundOthers">Others</label>
 </div>
 </div>
 
@@ -278,22 +157,21 @@ canvas {
 <div class="section">
 <h3>Nature of Work</h3>
 <select id="natureOfWorkSelect" onchange="toggleWorkFields()" required>
-  <option value="">Select Work Type</option>
-  <option value="Employed">Employed (Private)</option>
-  <option value="SelfEmployed">Self Employed</option>
-  <option value="GovernmentEmployee">Government Employee</option>
-  <option value="Student">Student</option>
-  <option value="Others">Others</option>
+<option value="">Select Work Type</option>
+<option value="Employed">Employed (Private)</option>
+<option value="SelfEmployed">Self Employed</option>
+<option value="GovernmentEmployee">Government Employee</option>
+<option value="Student">Student</option>
+<option value="Others">Others</option>
 </select>
-<div id="workFields" style="margin-top:15px;"></div>
+<div id="workFields" style="margin-top:12px;"></div>
 </div>
 
 <!-- PRIVACY -->
 <div class="section">
 <h3>Privacy Notice & Consent</h3>
 <div class="privacy-box">
-<p>I am aware that the Palawan Group of Companies (PGC) will collect and process the personal data I will provide in this Form in order to attend to my request for its services, which may include any
-or all of the following: pawning, foreign currency exchange, money remittance, bills payment, and/or membership application.</p>
+<p>I am aware that the Palawan Group of Companies (PGC) will collect and process the personal data I provide to attend to my request. Data may be shared with regulators (BSP, AMLC) and used for credit scoring, analytics, and service improvement.</p>
 </div>
 <div class="consent-box">
 <label><input type="checkbox" id="agreePrivacy"> I have read and agree to the Privacy Notice</label>
@@ -303,9 +181,8 @@ or all of the following: pawning, foreign currency exchange, money remittance, b
 <!-- SIGNATURE -->
 <div class="section">
 <h3>Customer Signature</h3>
-<div class="signature-box">
-<canvas id="signature-pad"></canvas>
-<br><button class="btn-secondary" type="button" onclick="signaturePad.clear()">Clear Signature</button>
+<div class="signature-box"><canvas id="signature-pad"></canvas><br>
+<button class="btn-secondary" type="button" onclick="signaturePad.clear()">Clear Signature</button>
 </div>
 <p class="footer-note">By signing above, you confirm all information provided is true and correct.</p>
 </div>
@@ -315,17 +192,22 @@ or all of the following: pawning, foreign currency exchange, money remittance, b
 </div>
 
 <script>
+// SignaturePad with green theme
 const canvas = document.getElementById('signature-pad');
-const signaturePad = new SignaturePad(canvas);
+const signaturePad = new SignaturePad(canvas, {
+  penColor: "#2e7d32",
+  backgroundColor: "rgba(255,255,255,0)",
+  minWidth: 1,
+  maxWidth: 2.5
+});
 
-function resizeCanvas() {
+function resizeCanvas(){
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
   canvas.width = canvas.offsetWidth * ratio;
   canvas.height = canvas.offsetHeight * ratio;
   canvas.getContext("2d").scale(ratio, ratio);
   signaturePad.clear();
 }
-
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
 
@@ -355,12 +237,10 @@ function toggleWorkFields(){
 
 function submitForm(){
   if(!document.getElementById("agreePrivacy").checked){
-    alert("You must agree to the Privacy Notice before submitting.");
-    return;
+    alert("You must agree to the Privacy Notice before submitting."); return;
   }
   if(signaturePad.isEmpty()){
-    alert("Please provide signature.");
-    return;
+    alert("Please provide signature."); return;
   }
 
   const funds = Array.from(document.querySelectorAll('input[name="sourcesOfFunds"]:checked')).map(f=>f.value);
@@ -406,11 +286,15 @@ function submitForm(){
     signature: signaturePad.toDataURL("image/jpeg")
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbyCzSEJBV0Ql1Ehoboiym7kFdeVsC0lG5ndMPVUUs3pjTA-0cVDSIrCqnA4MxT0yylq/exec",{
+  fetch("https://script.google.com/macros/s/AKfycbwR47e2VTnTtY--r6g7cpiPYAmIyUn20s3ZiCp8RzG4mvOiE8D37vLsRu8IJ34VBM2W/exec", { // Replace with your Apps Script Web App URL
     method:"POST",
     body:JSON.stringify(formData)
   }).then(res=>res.json())
-    .then(data=>{alert("Submitted Successfully! Customer ID: "+data.customerID); location.reload();});
+    .then(data=>{
+      alert("Submitted Successfully!\nCustomer ID: "+(data.customerID||'N/A'));
+      location.reload();
+    })
+    .catch(err=>alert("Error submitting form: "+err));
 }
 </script>
 </body>
