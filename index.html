@@ -1316,7 +1316,7 @@ button {
 
 <script>
 // ============================================
-// UPDATED WEB APP URL - REPLACE WITH YOURS
+// WEB APP URL - REPLACE WITH YOUR DEPLOYED URL
 // ============================================
 const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzCSTe9YuBR-e74oMZlIl0YCvh21z2CntxGwlJXGRwanZg3yx9UHuHz7Qy4wtP1__-d/exec";
 
@@ -1355,10 +1355,11 @@ function initSignaturePad() {
   const canvas = document.getElementById('signature-pad');
   signaturePad = new SignaturePad(canvas, {
     penColor: "#1a5f3f",
-    backgroundColor: "rgba(255,255,255,0)",
+    backgroundColor: "rgba(255,255,255,1)",
     minWidth: 1.2,
     maxWidth: 2.8,
-    velocityFilterWeight: 0.7
+    velocityFilterWeight: 0.7,
+    throttle: 16
   });
   
   resizeCanvas();
@@ -1369,11 +1370,22 @@ function resizeCanvas() {
   const canvas = document.getElementById('signature-pad');
   const ratio = Math.max(window.devicePixelRatio || 1, 1);
   const rect = canvas.getBoundingClientRect();
+  
+  // Save current content
+  const data = signaturePad.isEmpty() ? null : signaturePad.toData();
+  
   canvas.width = rect.width * ratio;
   canvas.height = rect.height * ratio;
+  
   const ctx = canvas.getContext("2d");
   ctx.scale(ratio, ratio);
-  signaturePad.clear();
+  
+  // Restore content if existed
+  if (data) {
+    signaturePad.fromData(data);
+  } else {
+    signaturePad.clear();
+  }
 }
 
 function debounce(func, wait) {
@@ -1404,7 +1416,6 @@ function checkRiskLevel() {
   const pepStatus = document.querySelector('input[name="pepStatus"]:checked')?.value;
   const riskBanner = document.getElementById('riskBanner');
   
-  // Check if EDD is required (PEP or income >= 800k)
   const requiresEDD = (pepStatus && pepStatus !== 'NONE') || annualIncome >= 800000;
   
   if (requiresEDD) {
@@ -1426,7 +1437,6 @@ function togglePEPDetails() {
   
   if (selectedPEP !== 'NONE') {
     pepDetails.classList.add('active');
-    // Show related PEP name field for family and associates
     if (selectedPEP === 'FAMILY_MEMBER' || selectedPEP === 'CLOSE_ASSOCIATE') {
       pepNameField.style.display = 'block';
       document.getElementById('pepRelatedName').required = true;
@@ -1519,12 +1529,10 @@ function validateForm() {
   let valid = true;
   let firstError = null;
 
-  // Remove previous errors
   document.querySelectorAll('.input-error').forEach(el => {
     el.classList.remove('input-error');
   });
 
-  // Required fields validation
   const requiredFields = [
     {id: 'dateFiled', name: 'Date Filed'},
     {id: 'lastName', name: 'Last Name'},
@@ -1545,14 +1553,12 @@ function validateForm() {
     }
   });
 
-  // Sources of funds validation
   const fundsChecked = document.querySelectorAll('input[name="sourcesOfFunds"]:checked');
   if (fundsChecked.length === 0) {
     alert("Please select at least one source of funds.");
     valid = false;
   }
 
-  // Work type validation
   const workType = document.getElementById('natureOfWorkSelect').value;
   if (!workType) {
     document.getElementById('natureOfWorkSelect').classList.add('input-error');
@@ -1560,7 +1566,6 @@ function validateForm() {
     valid = false;
   }
 
-  // Work-specific fields validation
   const workFieldsMap = {
     "Employed": ['employerName', 'natureWork', 'officeAddress'],
     "SelfEmployed": ['businessName', 'businessAddress'],
@@ -1579,7 +1584,6 @@ function validateForm() {
     }
   }
 
-  // PEP validation
   const pepStatus = document.querySelector('input[name="pepStatus"]:checked')?.value;
   if (!pepStatus) {
     alert("Please select your PEP status.");
@@ -1611,13 +1615,11 @@ function validateForm() {
     }
   }
 
-  // Privacy consent
   if (!document.getElementById("agreePrivacy").checked) {
     alert("You must agree to the Privacy Notice before submitting.");
     valid = false;
   }
 
-  // Signature validation
   if (signaturePad.isEmpty()) {
     alert("Please provide your digital signature.");
     valid = false;
@@ -1637,7 +1639,6 @@ function closeDuplicateModal() {
   pendingFormData = null;
   isDuplicateConfirmed = false;
   
-  // Re-enable submit button
   const submitBtn = document.querySelector('button.btn-primary');
   submitBtn.disabled = false;
   submitBtn.innerHTML = `
@@ -1651,7 +1652,6 @@ function closeDuplicateModal() {
 function proceedWithSubmission() {
   isDuplicateConfirmed = true;
   document.getElementById('duplicateModal').style.display = 'none';
-  // Retry submission with confirmed flag
   if (pendingFormData) {
     submitWithData(pendingFormData);
   }
@@ -1666,7 +1666,6 @@ function showDuplicateModal(warningMessage, count, existingIDs, newCustomerID) {
     <strong>New Customer ID:</strong> ${newCustomerID}<br>
     <strong>Existing Records:</strong> ${count} found`;
   
-  // Populate existing IDs
   listEl.innerHTML = existingIDs.map(id => `<li>${id}</li>`).join('');
   
   modal.style.display = 'flex';
@@ -1676,6 +1675,12 @@ function showDuplicateModal(warningMessage, count, existingIDs, newCustomerID) {
 function collectFormData() {
   const pepStatus = document.querySelector('input[name="pepStatus"]:checked').value;
   const funds = Array.from(document.querySelectorAll('input[name="sourcesOfFunds"]:checked')).map(f => f.value);
+  
+  // Get signature as PNG base64
+  let signatureData = "";
+  if (!signaturePad.isEmpty()) {
+    signatureData = signaturePad.toDataURL("image/png");
+  }
   
   return {
     dateFiled: document.getElementById('dateFiled').value,
@@ -1722,7 +1727,7 @@ function collectFormData() {
       pepName: document.getElementById('pepRelatedName')?.value || '',
       sourceOfWealth: document.getElementById('pepSourceOfWealth')?.value || ''
     },
-    signature: signaturePad.toDataURL("image/png"),
+    signature: signatureData,
     ipAddress: clientIP,
     userAgent: userAgent,
     submissionTimestamp: new Date().toISOString()
@@ -1733,7 +1738,6 @@ function collectFormData() {
 async function submitForm() {
   if (!validateForm()) return;
   
-  // If already confirmed duplicate, proceed directly
   if (isDuplicateConfirmed) {
     const formData = collectFormData();
     await submitWithData(formData);
@@ -1763,7 +1767,6 @@ async function submitWithData(formData) {
     const result = await response.json();
     
     if (result.status === "success") {
-      // Check for duplicate warning
       if (result.duplicateWarning && !isDuplicateConfirmed) {
         pendingFormData = formData;
         showDuplicateModal(
@@ -1773,10 +1776,9 @@ async function submitWithData(formData) {
           result.customerID
         );
         overlay.style.display = 'none';
-        return; // Stop here, wait for user confirmation
+        return;
       }
       
-      // Show success message
       overlay.style.display = 'none';
       let message = `Application Submitted Successfully!\n\nCustomer ID: ${result.customerID}\nRisk Level: ${result.riskLevel}\nPDF Folder: ${result.pdfFolder || 'Root'}`;
       
@@ -1791,7 +1793,6 @@ async function submitWithData(formData) {
       alert(message);
       location.reload();
     } else if (result.status === "duplicate_warning") {
-      // Handle duplicate warning from server
       pendingFormData = formData;
       showDuplicateModal(
         result.message, 
